@@ -1,0 +1,667 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "603053c7-2907-4a93-a46e-640b69c1367b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sqlalchemy\n",
+    "import pymysql\n",
+    "from sqlalchemy import create_engine\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "2c29e2cc-bbcb-41b3-96b9-79faaa7ff84c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "password = ''\n",
+    "db_name = 'forgeweek2'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "503e24de-343f-4b0c-a5e3-675a1faed46e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password=password, database=db_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "4ac03bd7-fad2-4d0e-a84d-71ea360fff2f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "connection = create_engine(\"mysql+pymysql://root:\" + password + \"@localhost:3306/\" + db_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "98fb409b-f640-43cc-bb84-33d7d78e2274",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "video = pd.read_csv('documents/LaunchProject2/sqldata/sql_video.csv')\n",
+    "channel = pd.read_csv('documents/LaunchProject2/sqldata/sql_channel.csv')\n",
+    "subscription = pd.read_csv('documents/LaunchProject2/sqldata/sql_subscription.csv')\n",
+    "view = pd.read_csv('documents/LaunchProject2/sqldata/sql_view.csv')\n",
+    "user = pd.read_csv('documents/LaunchProject2/sqldata/sql_user.csv')\n",
+    "owner = pd.read_csv('documents/LaunchProject2/sqldata/sql_owner.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "id": "602f8a69-03ff-4b0a-9b6b-de75645c4d1d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table1_name = 'video'\n",
+    "table2_name = 'channel'\n",
+    "table3_name = 'subscription'\n",
+    "table4_name = 'view'\n",
+    "table5_name = 'user'\n",
+    "table6_name = 'owner'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "id": "9b7ef01e-fb39-4044-8fd7-51a09655e4d2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "10"
+      ]
+     },
+     "execution_count": 51,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "video.to_sql(name=table1_name, con=connection, if_exists='replace', index=False)\n",
+    "channel.to_sql(name=table2_name, con=connection, if_exists='replace', index=False)\n",
+    "subscription.to_sql(name=table3_name, con=connection, if_exists='replace', index=False)\n",
+    "view.to_sql(name=table4_name, con=connection, if_exists='replace', index=False)\n",
+    "user.to_sql(name=table5_name, con=connection, if_exists='replace', index=False)\n",
+    "owner.to_sql(name=table6_name, con=connection, if_exists='replace', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 135,
+   "id": "110c1c4b-785b-4d08-a49a-3d571013a85d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Title</th>\n",
+       "      <th>Popularity</th>\n",
+       "      <th>Engagement</th>\n",
+       "      <th>UploadedDays</th>\n",
+       "      <th>Trending Score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Minecraft 1.21 Building Ideas</td>\n",
+       "      <td>14.79</td>\n",
+       "      <td>0.969928</td>\n",
+       "      <td>8</td>\n",
+       "      <td>9.615901</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>The Story of Apollo 11</td>\n",
+       "      <td>15.56</td>\n",
+       "      <td>1.237732</td>\n",
+       "      <td>28</td>\n",
+       "      <td>4.749237</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>10‑Minute Morning Stretch</td>\n",
+       "      <td>8.56</td>\n",
+       "      <td>1.358363</td>\n",
+       "      <td>18</td>\n",
+       "      <td>4.727425</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>How to Refinish Old Furniture</td>\n",
+       "      <td>4.89</td>\n",
+       "      <td>7.075835</td>\n",
+       "      <td>43</td>\n",
+       "      <td>4.030449</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Piano Cover: Bohemian Rhapsody</td>\n",
+       "      <td>6.34</td>\n",
+       "      <td>2.356725</td>\n",
+       "      <td>33</td>\n",
+       "      <td>2.869540</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>How to Travel Europe on $50 a Day</td>\n",
+       "      <td>14.25</td>\n",
+       "      <td>0.534279</td>\n",
+       "      <td>23</td>\n",
+       "      <td>2.410705</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Inside the Amazon Rainforest</td>\n",
+       "      <td>3.96</td>\n",
+       "      <td>0.819213</td>\n",
+       "      <td>6</td>\n",
+       "      <td>2.403276</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>How CRISPR Gene Editing Works</td>\n",
+       "      <td>7.00</td>\n",
+       "      <td>0.926933</td>\n",
+       "      <td>20</td>\n",
+       "      <td>2.386998</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>Beginner's Guide to Statistics</td>\n",
+       "      <td>13.47</td>\n",
+       "      <td>25.570175</td>\n",
+       "      <td>104</td>\n",
+       "      <td>1.900072</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>Secrets of the Coral Reef</td>\n",
+       "      <td>4.65</td>\n",
+       "      <td>0.355237</td>\n",
+       "      <td>3</td>\n",
+       "      <td>1.421764</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                               Title  Popularity  Engagement  UploadedDays  \\\n",
+       "0      Minecraft 1.21 Building Ideas       14.79    0.969928             8   \n",
+       "1             The Story of Apollo 11       15.56    1.237732            28   \n",
+       "2          10‑Minute Morning Stretch        8.56    1.358363            18   \n",
+       "3      How to Refinish Old Furniture        4.89    7.075835            43   \n",
+       "4     Piano Cover: Bohemian Rhapsody        6.34    2.356725            33   \n",
+       "5  How to Travel Europe on $50 a Day       14.25    0.534279            23   \n",
+       "6       Inside the Amazon Rainforest        3.96    0.819213             6   \n",
+       "7      How CRISPR Gene Editing Works        7.00    0.926933            20   \n",
+       "8     Beginner's Guide to Statistics       13.47   25.570175           104   \n",
+       "9          Secrets of the Coral Reef        4.65    0.355237             3   \n",
+       "\n",
+       "   Trending Score  \n",
+       "0        9.615901  \n",
+       "1        4.749237  \n",
+       "2        4.727425  \n",
+       "3        4.030449  \n",
+       "4        2.869540  \n",
+       "5        2.410705  \n",
+       "6        2.403276  \n",
+       "7        2.386998  \n",
+       "8        1.900072  \n",
+       "9        1.421764  "
+      ]
+     },
+     "execution_count": 135,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "query1 = \"\"\"\n",
+    "SELECT \n",
+    "    sub.Title,\n",
+    "    sub.Popularity,\n",
+    "    sub.Engagement,\n",
+    "    sub.UploadedDays,\n",
+    "    sub.Popularity * sub.Engagement * EXP(-0.05 * sub.UploadedDays) AS `Trending Score`\n",
+    "FROM (\n",
+    "    SELECT \n",
+    "        Video.Title,\n",
+    "        COUNT(View.`Video ID`) * AVG(Video.Rating) AS Popularity,\n",
+    "        AVG(View.`Duration Watched`) / Video.Duration AS Engagement,\n",
+    "        DATEDIFF(CURDATE(), STR_TO_DATE(Video.`Upload Date`, '%%m/%%d/%%Y')) AS UploadedDays\n",
+    "    FROM \n",
+    "        Video INNER JOIN View ON Video.`Video ID` = View.`Video ID`\n",
+    "    GROUP BY \n",
+    "        Video.Title, Video.Duration, Video.`Upload Date`\n",
+    ") AS sub\n",
+    "ORDER BY \n",
+    "    `Trending Score` DESC\n",
+    "LIMIT 10;\n",
+    "\"\"\"\n",
+    "result_1 = pd.read_sql(query1, con=connection)\n",
+    "result_1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 133,
+   "id": "4d618c15-4954-47b6-8534-71df5c44524e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Name</th>\n",
+       "      <th>Momentum</th>\n",
+       "      <th>Engagement</th>\n",
+       "      <th>Trending Score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Indie Music Lounge</td>\n",
+       "      <td>14.345314</td>\n",
+       "      <td>0.0976</td>\n",
+       "      <td>4.303405e-09</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>World Travel Vlogs</td>\n",
+       "      <td>6.488650</td>\n",
+       "      <td>0.1084</td>\n",
+       "      <td>3.427367e-13</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Fitness Pro Tips</td>\n",
+       "      <td>3.244032</td>\n",
+       "      <td>0.1434</td>\n",
+       "      <td>4.365782e-15</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Cinema Corner</td>\n",
+       "      <td>8.046435</td>\n",
+       "      <td>0.3976</td>\n",
+       "      <td>5.899449e-24</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Epic Gaming Hub</td>\n",
+       "      <td>13.527040</td>\n",
+       "      <td>0.3810</td>\n",
+       "      <td>1.421471e-24</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>QuickTech Reviews</td>\n",
+       "      <td>19.259001</td>\n",
+       "      <td>0.1919</td>\n",
+       "      <td>1.126802e-24</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>HomeCooking Daily</td>\n",
+       "      <td>0.417750</td>\n",
+       "      <td>0.0070</td>\n",
+       "      <td>3.973193e-26</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                 Name   Momentum  Engagement  Trending Score\n",
+       "0  Indie Music Lounge  14.345314      0.0976    4.303405e-09\n",
+       "1  World Travel Vlogs   6.488650      0.1084    3.427367e-13\n",
+       "2    Fitness Pro Tips   3.244032      0.1434    4.365782e-15\n",
+       "3       Cinema Corner   8.046435      0.3976    5.899449e-24\n",
+       "4     Epic Gaming Hub  13.527040      0.3810    1.421471e-24\n",
+       "5   QuickTech Reviews  19.259001      0.1919    1.126802e-24\n",
+       "6   HomeCooking Daily   0.417750      0.0070    3.973193e-26"
+      ]
+     },
+     "execution_count": 133,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "query2 = \"\"\"\n",
+    "SELECT\n",
+    "    Channel.Name,\n",
+    "    sub.Momentum,\n",
+    "    sub.`Total Duration`/Channel.Subscribers AS Engagement,\n",
+    "    sub.Momentum* sub.`Total Duration`/Channel.Subscribers* \n",
+    "    EXP(-0.05 * DATEDIFF(CURDATE(), STR_TO_DATE(Channel.`Creation Date`, '%%m/%%d/%%Y'))) AS `Trending Score`\n",
+    "From (\n",
+    "    SELECT \n",
+    "        Video.`Channel ID`,\n",
+    "        COUNT(View.`Video ID`) * AVG(Video.Rating) * AVG(View.`Duration Watched`/ Video.Duration) AS Momentum,\n",
+    "        SUM(View.`Duration Watched`) AS `Total Duration`\n",
+    "    FROM \n",
+    "        Video INNER JOIN View ON Video.`Video ID` = View.`Video ID`\n",
+    "    WHERE\n",
+    "        STR_TO_DATE(Video.`Upload Date`, '%%m/%%d/%%Y') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)\n",
+    "    GROUP BY \n",
+    "        Video.`Channel ID`\n",
+    ") as sub\n",
+    "INNER JOIN Channel ON sub.`Channel ID` = Channel.`Channel ID`\n",
+    "ORDER BY \n",
+    "    `Trending Score` DESC\n",
+    "LIMIT 10;\n",
+    "\"\"\"\n",
+    "result_2 = pd.read_sql(query2, con=connection)\n",
+    "result_2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 131,
+   "id": "4a622793-06e7-4ea6-b593-60fed10d1ac8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Category</th>\n",
+       "      <th>Popularity</th>\n",
+       "      <th>Engagement</th>\n",
+       "      <th>Trending Score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Gaming</td>\n",
+       "      <td>14.79</td>\n",
+       "      <td>0.969933</td>\n",
+       "      <td>9.615952</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Documentary</td>\n",
+       "      <td>24.17</td>\n",
+       "      <td>1.020883</td>\n",
+       "      <td>9.002003</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Fitness</td>\n",
+       "      <td>8.56</td>\n",
+       "      <td>1.358400</td>\n",
+       "      <td>4.727553</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Travel</td>\n",
+       "      <td>14.25</td>\n",
+       "      <td>0.534300</td>\n",
+       "      <td>2.410801</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Education</td>\n",
+       "      <td>7.00</td>\n",
+       "      <td>0.926950</td>\n",
+       "      <td>2.387041</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>Technology</td>\n",
+       "      <td>3.75</td>\n",
+       "      <td>0.111400</td>\n",
+       "      <td>0.187707</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Movies</td>\n",
+       "      <td>4.84</td>\n",
+       "      <td>0.083100</td>\n",
+       "      <td>0.127353</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "      Category  Popularity  Engagement  Trending Score\n",
+       "0       Gaming       14.79    0.969933        9.615952\n",
+       "1  Documentary       24.17    1.020883        9.002003\n",
+       "2      Fitness        8.56    1.358400        4.727553\n",
+       "3       Travel       14.25    0.534300        2.410801\n",
+       "4    Education        7.00    0.926950        2.387041\n",
+       "5   Technology        3.75    0.111400        0.187707\n",
+       "6       Movies        4.84    0.083100        0.127353"
+      ]
+     },
+     "execution_count": 131,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "query3 = \"\"\"\n",
+    "SELECT \n",
+    "    Video.Category,\n",
+    "    COUNT(View.`Video ID`) * AVG(Video.Rating) AS Popularity,\n",
+    "    AVG(View.`Duration Watched`/ Video.Duration) AS Engagement,\n",
+    "    COUNT(View.`Video ID`) * AVG(Video.Rating)* \n",
+    "    AVG(View.`Duration Watched`/ Video.Duration)* \n",
+    "    EXP(-0.05 * AVG(DATEDIFF(CURDATE(), STR_TO_DATE(Video.`Upload Date`, '%%m/%%d/%%Y')))) AS `Trending Score`        \n",
+    "FROM \n",
+    "    Video INNER JOIN View ON Video.`Video ID` = View.`Video ID`\n",
+    "WHERE \n",
+    "    STR_TO_DATE(Video.`Upload Date`, '%%m/%%d/%%Y') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)\n",
+    "GROUP BY \n",
+    "    Video.Category\n",
+    "ORDER BY \n",
+    "    `Trending Score` DESC;\n",
+    "\"\"\"\n",
+    "result_3 = pd.read_sql(query3, con=connection)\n",
+    "result_3"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "801d9276-04bd-47be-9d24-d7e0c4422de0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pymongo\n",
+    "from pymongo import MongoClient"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "738ff015-6aee-408e-a45d-da1b693963c2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "client = MongoClient('localhost', 27017)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "ae36c6d8-a323-401e-9724-193e7ae6516b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True)"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "client"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "03b1881e-0ce2-406f-9457-70d8cdc65984",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "db = client.streaming"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "1a52e60a-d87d-4e6a-b5ff-e5d4650b38fa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "video_dict = video.to_dict('records')\n",
+    "channel_dict = channel.to_dict('records')\n",
+    "subscription_dict = subscription.to_dict('records')\n",
+    "view_dict = view.to_dict('records')\n",
+    "user_dict = user.to_dict('records')\n",
+    "owner_dict = owner.to_dict('records')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "73a0e8da-c9b8-496c-84f9-d8a28fd31a3f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "video_collection = db.videos\n",
+    "channel_collection = db.channels\n",
+    "subscription_collection = db.subscriptions\n",
+    "view_collection = db.views\n",
+    "user_collection = db.users\n",
+    "owner_collection = db.owners"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "b977b262-3fde-4c99-89f3-4480a354fd1d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "InsertManyResult([ObjectId('6836269624367ddbfc2944cd'), ObjectId('6836269624367ddbfc2944ce'), ObjectId('6836269624367ddbfc2944cf'), ObjectId('6836269624367ddbfc2944d0'), ObjectId('6836269624367ddbfc2944d1'), ObjectId('6836269624367ddbfc2944d2'), ObjectId('6836269624367ddbfc2944d3'), ObjectId('6836269624367ddbfc2944d4'), ObjectId('6836269624367ddbfc2944d5'), ObjectId('6836269624367ddbfc2944d6')], acknowledged=True)"
+      ]
+     },
+     "execution_count": 57,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "video_collection.insert_many(video_dict)\n",
+    "channel_collection.insert_many(channel_dict)\n",
+    "subscription_collection.insert_many(subscription_dict)\n",
+    "view_collection.insert_many(view_dict)\n",
+    "user_collection.insert_many(user_dict)\n",
+    "owner_collection.insert_many(owner_dict)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
